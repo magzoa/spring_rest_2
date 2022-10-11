@@ -20,6 +20,7 @@ public class Comentario extends General{
 	private Post post;//aplicación de asociación 1p
 	
 	
+	//Cuando el objeto es importante, no se agrega anotacion aqui.
 	@ManyToOne //1p
 	private Suscrito suscrito; //1p
 

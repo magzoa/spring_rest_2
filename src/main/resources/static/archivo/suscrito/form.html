@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="../../lib/css/bootstrap.min.css">
+
+<script src="../../lib/js/vue.js"></script>
+
+<script src="../../lib/js/axios.min.js"></script>
+
+<script src="../../lib/js/vue-axios.es5.js"></script>
+
+<title>Ejemplo api rest con Vue</title>
+</head>
+<body>
+
+	<div id="app">
+
+		<!-- abm -->
+		<div class="card">
+			<div class="card-header">{{title}}</div>
+		Objeto	{{suscrito}} 
+			<br>
+<!-- 		Lista	{{suscritos}} -->
+			<div class="card-body">
+				<div class="row mx-0">
+					<div class="col-8">
+						<div class="form-group row align-items-center">
+							<label for="nombre" class="col-3 mb-0">Nombre</label> <input
+								type="text" class="form-control col-9" id="nombre"
+								placeholder="Nombre" v-model="suscrito.nombre">
+						</div>
+					</div>
+					<div class="col-4 justify-content-end">
+						<div class="form-group row align-items-center">
+							<label for="suscritoCorreo" class="col-auto mb-0">Correo</label>
+							<input type="email" class="form-control col" id="suscritoCorreo"
+								placeholder="Correo" v-model="suscrito.correo">
+						</div>
+					</div>
+				</div>
+				<div class="row mx-0">
+
+					<div class="col-4">
+						<div class="row justify-content-end">
+							<div class="col-auto">
+								<button type="button" class="btn btn-success" @click="saveSuscrito(suscrito)">
+									Registrar</button>
+								<button type="button" class="btn btn-danger">Cancelar</button>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 	fin ABM -->
+
+
+		<!-- inicio tabla -->
+
+
+		<div class="card mt-3">
+			<div class="card-header">Lista de Suscritos</div>
+			<div class="card-body">
+
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Nombre</th>
+							<th scope="col">Correo</th>
+							<th scope="col">Editar</th>
+							<th scope="col">Eliminar</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="suscrito in suscritos" :key="suscrito.codigo">
+							<th scope="row">{{suscrito.codigo}}</th>
+							<td>{{suscrito.nombre}}</td>
+							<td>{{suscrito.correo}}</td>
+		<td><button @click="editarSuscrito(suscrito)" type="button" class="btn btn-warning">Editar</button></td>
+	<td><button @click="eliminarSuscrito(suscrito)" type="button" class="btn btn-danger">Eliminar</button></td>
+						</tr>
+						
+						
+					</tbody>
+				</table>
+
+
+			</div>
+		</div>
+
+
+
+
+		<!-- fin tabla -->
+
+
+	</div>
+	<!--   fin div app -->
+
+	<script>
+    
+    
+    
+    var app = new Vue({
+        el: '#app',
+        data: {
+           title:'El título es Registro de Suscritos',
+           suscrito:{'nombre':'','correo':''},   //Inicializacion del objeto suscrito en js
+           apiURL:'http://localhost:8080/',
+           suscritos:[]  //Inicializando el vector de suscritos
+        
+        },
+        created(){
+        	
+        	
+        },
+        mounted() { //Cuando se monta el DOM
+        	
+        	this.getSuscritos();//invocación de método
+        	
+        	
+        },
+        methods: {
+        	
+        	saveSuscrito(suscrito) {
+        		
+            	//if(this.suscrito.codigo===""||this.suscrito.codigo===null){
+            	//delete	this.suscrito.codigo;
+            	//}
+            	
+            	
+            	Vue.axios.post(this.apiURL +'/suscritos',suscrito)
+          	  .then(response => { 
+          		  
+          		  console.log('Registro exitoso');
+          		  
+          		  this.suscrito={'nombre':'','correo':''};//vaciar los campos
+          		  
+          		this.getSuscritos();
+          		  
+          	  }).catch(error => console.log(error))
+            	
+            	
+                
+            },
+            
+            getSuscritos() {
+            	Vue.axios.get(this.apiURL + '/suscritos')
+            	  .then(response => {
+            		  this.suscritos = response.data
+            		  console.log(response.data);
+            	  }).catch(error => console.log(error))
+            	},
+            	
+            	editarSuscrito(suscrito){
+            		//global		parametro
+            		
+            		this.suscrito=suscrito;
+            		
+            	},
+            	
+            	eliminarSuscrito(suscrito) {
+                	
+            		if(confirm('Desea eliminar el Suscrito ?')){
+            		
+            			Vue.axios.delete(this.apiURL +'suscritos/'+suscrito.codigo)
+                  	  .then(response => { 
+                  		  console.log("Eminado....")
+                  	
+                  		  this.getSuscritos();
+                  		  
+                  	  }).catch(error => console.log(error))
+            			
+            		}
+                }
+
+        }
+    });
+
+    
+    
+    
+    </script>
+
+
+
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="../../lib/js/jquery-3.4.1.min.js"></script>
+	<script src="../../lib/js/popper.min.js"></script>
+	<script src="../../lib/js/bootstrap.min.js"></script>
+</body>
+</html>
