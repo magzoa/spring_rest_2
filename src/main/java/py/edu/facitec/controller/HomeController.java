@@ -16,7 +16,15 @@ public class HomeController {
 		System.out.println("Ingrese a la página de inicio");
 		
 		//Retornar una página
-		return "index";
+		return "usuario/login";
+	}
+	
+	@RequestMapping("/form")
+	public String formSuscrito() {
+		
+		System.out.println("Cargando la página de Suscrito");
+		
+		return "suscrito/form";
 	}
 	
 	

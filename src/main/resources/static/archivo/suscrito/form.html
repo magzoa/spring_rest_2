@@ -113,12 +113,15 @@
         data: {
            title:'El título es Registro de Suscritos',
            suscrito:{'nombre':'','correo':''},   //Inicializacion del objeto suscrito en js
-           apiURL:'http://localhost:8080/',
+           apiURL:'http://localhost:8080',
            suscritos:[]  //Inicializando el vector de suscritos
         
         },
         created(){
         	
+ console.log(localStorage.getItem("token"));
+ Vue.axios.defaults.headers.common['Authorization'] ='Bearer '+ localStorage.getItem("token");
+
         	
         },
         mounted() { //Cuando se monta el DOM
@@ -170,7 +173,7 @@
                 	
             		if(confirm('Desea eliminar el Suscrito ?')){
             		
-            			Vue.axios.delete(this.apiURL +'suscritos/'+suscrito.codigo)
+            			Vue.axios.delete(this.apiURL +'/suscritos/'+suscrito.codigo)
                   	  .then(response => { 
                   		  console.log("Eminado....")
                   	
